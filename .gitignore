@@ -2,10 +2,10 @@
 
 
 .idea/*.xml
-.idea/.name
-.idea/copyright
-.idea/libraries
-.idea/shelf
+src/lesson1/task1/.idea/.name
+src/lesson1/task1/.idea/copyright
+src/lesson1/task1/.idea/libraries
+src/lesson1/task1/.idea/shelf
 target
 out
 build/*
