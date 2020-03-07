@@ -3,8 +3,10 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.sqrt
+import kotlin.math.abs
 
 /**
  * Пример
@@ -63,7 +65,15 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String {
+    if ((age % 100) in 11..19) return "$age лет"
+    return when {
+        (age % 10) == 1 -> "$age год"
+        (age % 10) in 2..4 -> "$age года"
+        (age % 10) in 5..9 -> "$age лет"
+        else -> "$age лет"
+    }
+}
 
 /**
  * Простая
@@ -76,7 +86,14 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val halfRoute = (t1 * v1 + t2 * v2 + t3 * v3) / 2
+    return when {
+        halfRoute <= t1 * v1 -> halfRoute / v1
+        halfRoute > (t1 * v1 + t2 * v2) -> t1 + t2 + (halfRoute - t1 * v1 - t2 * v2) / v3
+        else -> t1 + (halfRoute - t1 * v1) / v2
+    }
+}
 
 /**
  * Простая
@@ -91,7 +108,21 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    var threaten1 = 0
+    var threaten2 = 0
+    if (kingX == rookX1) threaten1 = 1
+    if (kingX == rookX2) threaten2 = 1
+    if (kingY == rookY1) threaten1 = 1
+    if (kingY == rookY2) threaten2 = 1
+
+    return when {
+        threaten1 == 1 && threaten2 == 0 -> 1
+        threaten1 == 0 && threaten2 == 1 -> 2
+        threaten1 == 1 && threaten2 == 1 -> 3
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -107,7 +138,22 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    var threaten1 = 0
+    var threaten2 = 0
+
+    // проверем угрозы от ладьи и слона
+    if (kingX == rookX) threaten1 = 1
+    if (kingY == rookY) threaten1 = 1
+    if (abs(bishopX - kingX) == abs(bishopY - kingY)) threaten2 = 1
+
+    return when {
+        threaten1 == 1 && threaten2 == 0 -> 1
+        threaten1 == 0 && threaten2 == 1 -> 2
+        threaten1 == 1 && threaten2 == 1 -> 3
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -117,7 +163,35 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    //проверяем существование треугольника
+    if (!(((a + b) > c) && ((b + c) > a) && ((a + c) > b))) return -1
+
+    val hypotenuse: Double
+    val cathetus1: Double
+    val cathetus2: Double
+
+    //проверяем соотвествие теореме Пифагора
+    if (a >= b && a >= c) {
+        hypotenuse = a
+        cathetus1 = b
+        cathetus2 = c
+    } else if (b >= a && b >= c) {
+        hypotenuse = b
+        cathetus1 = a
+        cathetus2 = c
+    } else {
+        hypotenuse = c
+        cathetus1 = a
+        cathetus2 = b
+    }
+
+    return when {
+        sqr(cathetus1) + sqr(cathetus2) > sqr(hypotenuse) -> 0
+        sqr(cathetus1) + sqr(cathetus2) == sqr(hypotenuse) -> 1
+        else -> 2
+    }
+}
 
 /**
  * Средняя
@@ -127,4 +201,17 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return when {
+        //отрезки не пересекаются
+        b < c || d < a -> -1
+        // отрезок CD внутри отрезка AB
+        b >= d && c >= a -> d - c
+        // отрезок CD правее отрезка AB
+        b <= d && c >= a -> b - c
+        // отрезок AB внутри отрезка CD
+        a >= c && b <= d -> b - a
+        // отрезок AB правее отрезка CD
+        else -> d - a
+    }
+}
