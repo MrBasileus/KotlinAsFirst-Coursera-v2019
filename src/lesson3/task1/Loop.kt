@@ -67,7 +67,10 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    return if (!(n / 10 == 0)) 1 + digitNumber(n / 10)
+    else 1
+}
 
 /**
  * Простая
@@ -75,7 +78,25 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    /*var numFib1 = 1
+    var numFib2 = 1
+    var numFib = 0
+
+    if (n == 1 || n == 2) return numFib1
+
+    for (i in 3..n) {
+        numFib = numFib1 + numFib2
+        numFib1 = numFib2
+        numFib2 = numFib
+    }
+
+    return numFib*/
+
+    if (n == 1 || n == 2) return 1
+    return fib(n-1) + fib (n-2)
+
+}
 
 /**
  * Простая
@@ -83,7 +104,18 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var max: Int
+
+    max = if (m > n) m
+    else n
+
+    while (max <= m * n) {
+        if (max % m == 0 && max % n == 0) break
+        max++
+    }
+    return max
+}
 
 /**
  * Простая
@@ -106,7 +138,19 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var nod = 1
+    val min: Int
+
+    if (m > n) min = n
+    else min = m
+
+    for (i in 1..min) {
+        if (m % i == 0 && n % i == 0) nod = i
+        if (nod > 1) return false
+    }
+    return true
+}
 
 /**
  * Простая
